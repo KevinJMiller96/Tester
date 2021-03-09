@@ -1,0 +1,52 @@
+from constraint import *
+##External Library Linked from local machine
+
+
+##Define the problem set:
+aBeverage = ["Coffee","Water","Tea","Milk","OrangeJuice"]
+aColor = ["Yellow", "Blue", "Red", "Ivory", "Green"]
+aCigarette = ["Kools", "ChesterField", "OldGolds", "LuckyStrike", "Parliament"]
+aPet = ["Fox", "Horse", "Snails", "Dog", "Zebra"]
+aNationality = ["Norwegian", "Ukrainian", "Englishman", "Spaniard", "Japanese"]
+
+##Create an instance of the problem:
+problem = Problem()
+
+##Define the criteria for the problem set:
+criteria = aNationality + aPet + aCigarette + aColor + aBeverage
+problem.addVariables(criteria,[1,2,3,4,5])
+
+##Add the constraints to the problem:
+problem.addConstraint(AllDifferentConstraint(), aNationality)
+problem.addConstraint(AllDifferentConstraint(), aPet)
+problem.addConstraint(AllDifferentConstraint(), aCigarette)
+problem.addConstraint(AllDifferentConstraint(), aColor)
+problem.addConstraint(AllDifferentConstraint(), aBeverage)
+
+##Start to define the situational constraints: 
+problem.addConstraint(lambda a, A: a == A, ("Englishman","Red"))#Englishman lives in the red house
+problem.addConstraint(lambda b, B: b == B, ("Spaniard","Dog")) #Spaniard has the dog
+problem.addConstraint(lambda c, C: c == C, ("Coffee","Green"))#Green house drinks coffee
+problem.addConstraint(lambda d, D: d == D, ("Ukrainian","Tea"))#Ukrainian drinks tea
+problem.addConstraint(lambda e, E: e-E == 1, ("Green","Ivory"))#Green house is next to ivory
+problem.addConstraint(lambda f, F: f == F, ("OldGolds","Snails"))#OldGolds smoker owns the snails
+problem.addConstraint(lambda g, G: g == G, ("Kools","Yellow"))#Kools are smoked in the yellow house
+problem.addConstraint(InSetConstraint([3]), ["Milk"]) #Milk is drunk in the middle house
+problem.addConstraint(InSetConstraint([1]), ["Norwegian"]) #The Norwegian lives in the first house
+problem.addConstraint(lambda h, H: abs(h-H) == 1, ("ChesterField","Fox")) #Chestfield smoker lives house next to fox
+problem.addConstraint(lambda i, I: abs(i-I) == 1, ("Kools","Horse"))#Kools smoker lives next to the horse house 
+problem.addConstraint(lambda j, J: j == J, ("LuckyStrike","OrangeJuice")) #Lucky strikes drinks orange juice
+problem.addConstraint(lambda k, K: k == K, ("Japanese","Parliament"))
+problem.addConstraint(lambda l, L: abs(l-L) == 1, ("Norwegian","Blue"))
+
+aSolved = problem.getSolutions()[0]
+
+PrintSolution(aSolved)
+            
+            
+def PrintSolution(solved):
+    for i in range (1, 6):
+        for x in solved:
+            if solved[x] == i:
+                print (str(i), x)
+        print('')
